@@ -1,0 +1,16 @@
+:root {
+    --b-color: #fff;
+    --line-color-1: #a9a9a9;
+    --line-color-2: rgb(212, 212, 212);
+}
+
+.Dashboard {
+    position: relative;
+    width:100%px;
+    height:500px;
+    background-color: var(--b-color);
+    background-image:
+        conic-gradient(at calc(100% - 2px) calc(100% - 2px), var(--line-color-1) 270deg, #0000 0),
+        conic-gradient(at calc(100% - 1px) calc(100% - 1px), var(--line-color-2) 270deg, #0000 0);
+    background-size: 100px 100px, 20px 20px;
+}
