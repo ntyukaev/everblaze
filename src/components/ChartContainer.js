@@ -1,11 +1,14 @@
 import Draggable from './Draggable'
+import Resizable from './Resizable'
 import './ChartContainer.css'
 
 
 const ChartContainer = () => {
   return (
     <Draggable>
-      <div className='ChartContainer'></div>
+      <Resizable>
+        <div className='ChartContainer'></div>
+      </Resizable>
     </Draggable>
   )
 }
