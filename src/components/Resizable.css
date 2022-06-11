@@ -1,0 +1,78 @@
+/* .resizable {
+    position: relative;
+} */
+.resizer {
+    position: absolute;
+}
+
+.resizers > .lines {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+/* Angles */
+
+.angles > .resizer {
+    border: 3px solid #4286f4;
+    border-radius: 50%;
+}
+
+.angles > .resizer.top.left {
+    top:-3px;
+    left:-3px;
+    cursor: nwse-resize;
+}
+
+.angles > .resizer.top.right {
+    top:-3px;
+    right:-3px;
+    cursor: nesw-resize;
+}
+
+.angles > .resizer.bottom.left {
+    bottom:-3px;
+    left:-3px;
+    cursor: nesw-resize;
+}
+
+.resizer.bottom.right {
+    bottom:-3px;
+    right:-3px;
+    cursor: nwse-resize;
+}
+
+/* Lines */
+
+.lines > .resizer {
+    background-color: #4286f4;
+}
+
+.lines > .resizer.top {
+    height: 2px;
+    width: 100%;
+    top: -1px;
+    cursor: ns-resize;
+}
+
+.lines > .resizer.left {
+    width: 2px;
+    height: 100%;
+    left: -1px;
+    cursor: ew-resize;
+}
+
+.lines > .resizer.right {
+    width: 2px;
+    height: 100%;
+    right: -1px;
+    cursor: ew-resize;
+}
+
+
+.lines > .resizer.bottom {
+    width: 100%;
+    height: 2px;
+    bottom: -1px;
+    cursor: ns-resize;
+}
