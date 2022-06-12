@@ -11,7 +11,7 @@ const Container = styled.div.attrs(({ x, y, width, height }) => ({
 }))`
   cursor: grab;
   ${props =>
-    props.dragging && `
+    props.isDragging && `
       opacity: 0.8;
       cursor: grabbing;
     `
@@ -21,103 +21,137 @@ const Container = styled.div.attrs(({ x, y, width, height }) => ({
 `
 
 const Draggable = (props) => {
-  const [size, setSize] = useState({ width: 100, height: 100 })
-  const [dragging, setDragging] = useState(false)
-  const [resizing, setResizing] = useState(false)
-  const [position, setPosition] = useState({
+  // const [size, setSize] = useState({ width: 100, height: 100 })
+  const [isDragging, setIsDragging] = useState(false)
+  const [isResizing, setIsResizing] = useState(false)
+
+  const [dragState, setDragState] = useState({
+    width: 100,
+    height: 100,
     x: 0,
-    y: 0
+    y: 0,
+    translateX: 0,
+    translateY: 0,
+    diffX: 0,
+    diffY: 0,
+    resizingClickX: 0,
+    resizingClickY: 0,
+    directions: []
   })
-
-  const [translate, setTranslate] = useState({
-    x: 0,
-    y: 0
-  })
-
-  const [diff, setDiff] = useState({
-    x: 0,
-    y: 0
-  })
-
-  const [resizingClick, setResizingClick] = useState(null)
-
-  const handleMouseUpDragging = ({ clientX, clientY }) => {
-    window.removeEventListener('mousemove', handleMouseMoveDragging)
-    window.removeEventListener('mouseup', handleMouseUpDragging)
-    setPosition({
-      x: clientX - diff.x,
-      y: clientY - diff.y,
-    })
-    setDragging(false)
-  }
 
   useEffect(() => {
-    if (dragging) {
-      window.addEventListener('mousemove', handleMouseMoveDragging)
-      window.addEventListener('mouseup', handleMouseUpDragging)
-    }
-  }, [dragging])
-
-  useEffect(() => {
-    if (resizing) {
+    if (isResizing) {
       window.addEventListener('mousemove', handleMouseMoveResizing)
       window.addEventListener('mouseup', handleMouseUpResizing)
     }
-  }, [resizing])
+  }, [isResizing])
 
   const round = (p, n) => {
     return p % n < n / 2 ? p - (p % n) : p + n - (p % n)
   }
 
-  const handleMouseMoveDragging = ({ clientX, clientY }) => {
-    setTranslate({
-      x: round(clientX - diff.x, props.cellSize),
-      y: round(clientY - diff.y, props.cellSize)
+  const handleMouseDownResizing = (e) => {
+    e.stopPropagation()
+    setIsResizing(true)
+    setDragState({
+      ...dragState,
+      resizingClickX: e.clientX,
+      resizingClickY: e.clientY,
+      directions: Array.from(e.target.classList)
     })
   }
 
-  const handleMouseDownDragging = ({ clientX, clientY }) => {
-    setDiff({ x: clientX - position.x, y: clientY - position.y })
-    setDragging(true)
-  }
-
-  const handleMouseDownResizing = (e) => {
-    e.stopPropagation()
-    setResizing(true)
-    setResizingClick({ x: e.clientX, y: e.clientY, directions: Array.from(e.target.classList) })
-  }
-
-  const handleMouseMoveResizing = ({clientX, clientY}) => {
-    const diffX = clientX - resizingClick.x
-    const diffY = clientY - resizingClick.y
-    let {width, height} = size
-    if (resizingClick.directions.includes('left') || resizingClick.directions.includes('right')) {
+  const handleMouseMoveResizing = (e) => {
+    e.preventDefault()
+    console.log('handleMouseMoveResizing')
+    const resizingClickX = e.clientX
+    const resizingClickY = e.clientY
+    const diffX = resizingClickX - dragState.resizingClickX
+    const diffY = resizingClickY - dragState.resizingClickY
+    let width = dragState.width
+    let height = dragState.height
+    let translateX = dragState.translateX
+    let translateY = dragState.translateY
+    if (dragState.directions.includes('left')) {
+      translateX += diffX
+      width -= diffX
+    }
+    else if (dragState.directions.includes('right')) {
       width += diffX
     }
-    if (resizingClick.directions.includes('top') || resizingClick.directions.includes('bottom')) {
+    if (dragState.directions.includes('top')) {
+      translateY += diffY
+      height -= diffY
+    }
+    else if (dragState.directions.includes('bottom')) {
       height += diffY
     }
-    width = round(width, props.cellSize)
+    translateX = round(translateX, props.cellSize)
+    translateY = round(translateY, props.cellSize)
     height = round(height, props.cellSize)
-    setSize({width, height})
-    setResizingClick({ ...resizingClick, x: clientX, y: clientY })
+    width = round(width, props.cellSize)
+
+    setDragState({
+      ...dragState,
+      width,
+      height,
+      translateX,
+      translateY,
+      resizingClickX,
+      resizingClickY
+    })
   }
 
   const handleMouseUpResizing = () => {
+    console.log('handle mouse up resizing')
     window.removeEventListener('mousemove', handleMouseMoveResizing)
     window.removeEventListener('mouseup', handleMouseUpResizing)
-    setResizingClick(null)
-    setResizing(false)
+    setIsResizing(false)
+  }
+
+  useEffect(() => {
+    if (isDragging) {
+      window.addEventListener('mousemove', handleMouseMoveDragging)
+      window.addEventListener('mouseup', handleMouseUpDragging)
+    }
+  }, [isDragging])
+
+  const handleMouseDownDragging = ({clientX, clientY}) => {
+    setDragState({
+      ...dragState,
+      diffX: clientX - dragState.x,
+      diffY: clientY - dragState.y
+    })
+    setIsDragging(true)
+  }
+
+  const handleMouseMoveDragging = ({clientX, clientY}) => {
+    setDragState({
+      ...dragState,
+      translateX: round(clientX - dragState.diffX, props.cellSize),
+      translateY: round(clientY - dragState.diffY, props.cellSize)
+    })
+  }
+
+  const handleMouseUpDragging = ({clientX, clientY}) => {
+    window.removeEventListener('mousemove', handleMouseMoveDragging)
+    window.removeEventListener('mouseup', handleMouseUpDragging)
+    // setDragState({
+    //   ...dragState,
+    //   x: clientX - dragState.diffX,
+    //   y: clientY - dragState.diffY
+    // })
+    setIsDragging(false)
   }
 
   return (
     <Container
-      width={size.width}
-      height={size.height}
+      width={dragState.width}
+      height={dragState.height}
       onMouseDown={handleMouseDownDragging}
-      x={translate.x}
-      y={translate.y}
-      dragging={dragging}
+      x={dragState.translateX}
+      y={dragState.translateY}
+      isDragging={isDragging}
       className="draggable">
       <div className='resizers' onMouseDown={handleMouseDownResizing}>
         <div className='lines'>
