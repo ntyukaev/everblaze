@@ -42,7 +42,6 @@ const Draggable = (props) => {
   const [resizingClick, setResizingClick] = useState(null)
 
   const handleMouseUpDragging = ({ clientX, clientY }) => {
-    console.log('handleMouseUpDragging')
     window.removeEventListener('mousemove', handleMouseMoveDragging)
     window.removeEventListener('mouseup', handleMouseUpDragging)
     setPosition({
@@ -54,7 +53,6 @@ const Draggable = (props) => {
 
   useEffect(() => {
     if (dragging) {
-      console.log('useEffect dragging')
       window.addEventListener('mousemove', handleMouseMoveDragging)
       window.addEventListener('mouseup', handleMouseUpDragging)
     }
@@ -62,35 +60,34 @@ const Draggable = (props) => {
 
   useEffect(() => {
     if (resizing) {
-      console.log('useEffect resizing')
       window.addEventListener('mousemove', handleMouseMoveResizing)
       window.addEventListener('mouseup', handleMouseUpResizing)
     }
   }, [resizing])
 
+  const round = (p, n) => {
+    return p % n < n / 2 ? p - (p % n) : p + n - (p % n)
+  }
+
   const handleMouseMoveDragging = ({ clientX, clientY }) => {
-    console.log('handleMouseMoveDragging')
     setTranslate({
-      x: clientX - diff.x,
-      y: clientY - diff.y
+      x: round(clientX - diff.x, props.cellSize),
+      y: round(clientY - diff.y, props.cellSize)
     })
   }
 
   const handleMouseDownDragging = ({ clientX, clientY }) => {
-    console.log('handleMouseDownDragging')
     setDiff({ x: clientX - position.x, y: clientY - position.y })
     setDragging(true)
   }
 
   const handleMouseDownResizing = (e) => {
-    console.log('handleMouseDownResizing')
     e.stopPropagation()
     setResizing(true)
     setResizingClick({ x: e.clientX, y: e.clientY, directions: Array.from(e.target.classList) })
   }
 
   const handleMouseMoveResizing = ({clientX, clientY}) => {
-    console.log('handleMouseDownResizing')
     const diffX = clientX - resizingClick.x
     const diffY = clientY - resizingClick.y
     let {width, height} = size
@@ -100,12 +97,13 @@ const Draggable = (props) => {
     if (resizingClick.directions.includes('top') || resizingClick.directions.includes('bottom')) {
       height += diffY
     }
+    width = round(width, props.cellSize)
+    height = round(height, props.cellSize)
     setSize({width, height})
     setResizingClick({ ...resizingClick, x: clientX, y: clientY })
   }
 
   const handleMouseUpResizing = () => {
-    console.log('handleMouseUpResizing')
     window.removeEventListener('mousemove', handleMouseMoveResizing)
     window.removeEventListener('mouseup', handleMouseUpResizing)
     setResizingClick(null)

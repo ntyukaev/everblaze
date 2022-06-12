@@ -4,7 +4,7 @@ import './ChartContainer.css'
 
 const ChartContainer = () => {
   return (
-    <Draggable>
+    <Draggable cellSize={20}>
         <div className='ChartContainer'></div>
     </Draggable>
   )
