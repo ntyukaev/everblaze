@@ -23,11 +23,17 @@ const DraggableContainer = styled.div.attrs(({ x, y, width, height }) => ({
 const Draggable = (props) => {
   const [isDragging, setIsDragging] = useState(false)
   const [isResizing, setIsResizing] = useState(false)
-  const [size, setSize] = useState({ height: props.size.x, width: props.size.y })
-  const [translate, setTranslate] = useState({ x: props.defaultPosition.x, y: props.defaultPosition.y })
-  const [diff, setDiff] = useState({ x: 0, y: 0 })
-  const [resizingClick, setResizingClick] = useState({ x: 0, y: 0 })
-  const [directions, setDirections] = useState(null)
+  const [objectState, setObjectState] = useState({
+    height: props.size.x,
+    width: props.size.y,
+    x: props.defaultPosition.x,
+    y: props.defaultPosition.y,
+    lastResizingPosX: null,
+    lastResizingPosY: null,
+    dragDiffX: null,
+    dragDiffY: null,
+    resizingDirections: []
+  })
 
   useEffect(() => {
     if (isResizing) {
@@ -43,41 +49,55 @@ const Draggable = (props) => {
   const handleMouseDownResizing = (e) => {
     e.stopPropagation()
     setIsResizing(true)
-    setResizingClick({ x: e.clientX, y: e.clientY })
-    setDirections(Array.from(e.target.classList))
+    setObjectState(prevObjectState => {
+      return {
+        ...prevObjectState,
+        lastResizingPosX: e.clientX,
+        lastResizingPosY: e.clientY,
+        resizingDirections: Array.from(e.target.classList)
+      }
+    })
   }
 
   const handleMouseMoveResizing = (e) => {
     e.preventDefault()
-    const resizingClickX = e.clientX
-    const resizingClickY = e.clientY
-    const diffX = resizingClickX - resizingClick.x
-    const diffY = resizingClickY - resizingClick.y
-    let width = size.width
-    let height = size.height
-    let translateX = translate.x
-    let translateY = translate.y
+    const lastResizingPosX = e.clientX
+    const lastResizingPosY = e.clientY
+    const diffX = lastResizingPosX - objectState.lastResizingPosX
+    const diffY = lastResizingPosY - objectState.lastResizingPosY
+    let width = objectState.width
+    let height = objectState.height
+    let x = objectState.x
+    let y = objectState.y
+    let directions = objectState.resizingDirections
+
     if (directions.includes('left')) {
-      translateX += diffX
+      x += diffX
       width -= diffX
     }
     else if (directions.includes('right')) {
       width += diffX
     }
     if (directions.includes('top')) {
-      translateY += diffY
+      y += diffY
       height -= diffY
     }
     else if (directions.includes('bottom')) {
       height += diffY
     }
-    translateX = snapTo(translateX, props.grid.x)
-    translateY = snapTo(translateY, props.grid.y)
-    width = snapTo(width, props.grid.x)
-    height = snapTo(height, props.grid.y)
-    setSize({ width, height })
-    setTranslate({ x: translateX, y: translateY })
-    setResizingClick({ x: resizingClickX, y: resizingClickY })
+    x = snapTo(x, props.grid.x)
+    y = snapTo(y, props.grid.y)
+    width = snapTo(Math.min(props.maxSize.x, Math.max(width, props.minSize.x)), props.grid.x)
+    height = snapTo(Math.min(props.maxSize.y, Math.max(height, props.minSize.y)), props.grid.y)
+    setObjectState(prevData => {
+      if (width === snapTo(props.minSize.x, props.grid.x) || width === snapTo(props.maxSize.x, props.grid.x)) {
+        x = prevData.x
+      }
+      if (height === snapTo(props.minSize.y, props.grid.y) || height === snapTo(props.maxSize.y, props.grid.y)) {
+        y = prevData.y
+      }
+      return { ...prevData, width, height, x, y, lastResizingPosX, lastResizingPosY }
+    })
   }
 
   const handleMouseUpResizing = () => {
@@ -94,15 +114,24 @@ const Draggable = (props) => {
   }, [isDragging])
 
   const handleMouseDownDragging = ({ clientX, clientY }) => {
-    setDiff({ x: clientX - translate.x, y: clientY - translate.y })
+    setObjectState(prevObjectState => {
+      return {
+        ...prevObjectState,
+        dragDiffX: clientX - prevObjectState.x,
+        dragDiffY: clientY - prevObjectState.y
+      }
+    })
     setIsDragging(true)
   }
 
   const handleMouseMoveDragging = (e) => {
     e.preventDefault()
-    setTranslate({
-      x: snapTo(e.clientX - diff.x, props.grid.x),
-      y: snapTo(e.clientY - diff.y, props.grid.y)
+    setObjectState(prevObjectState => {
+      return {
+        ...prevObjectState,
+        x: snapTo(e.clientX - prevObjectState.dragDiffX, props.grid.x),
+        y: snapTo(e.clientY - prevObjectState.dragDiffY, props.grid.y)
+      }
     })
   }
 
@@ -114,11 +143,11 @@ const Draggable = (props) => {
 
   return (
     <DraggableContainer
-      width={size.width}
-      height={size.height}
+      width={objectState.width}
+      height={objectState.height}
       onMouseDown={handleMouseDownDragging}
-      x={translate.x}
-      y={translate.y}
+      x={objectState.x}
+      y={objectState.y}
       isDragging={isDragging}
       className="draggable">
       <div className='resizers' onMouseDown={handleMouseDownResizing}>
@@ -144,8 +173,8 @@ Draggable.defaultProps = {
   grid: { x: 20, y: 20 },
   defaultPosition: { x: 20, y: 40 },
   size: { x: 100, y: 100 },
-  minSize: { x: 20, y: 20 },
-  maxSize: { x: 150, y: 150 },
+  minSize: { x: 40, y: 40 },
+  maxSize: { x: 160, y: 160 },
   bounds: { left: 0, top: 0, right: 0, bottom: 0 }
 }
 
