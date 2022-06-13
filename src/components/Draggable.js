@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import styled from 'styled-components'
 import './Draggable.css'
 
-const Container = styled.div.attrs(({ x, y, width, height }) => ({
+const DraggableContainer = styled.div.attrs(({ x, y, width, height }) => ({
   style: {
     transform: `translate(${x}px, ${y}px)`,
     width: width,
@@ -21,14 +21,12 @@ const Container = styled.div.attrs(({ x, y, width, height }) => ({
 `
 
 const Draggable = (props) => {
-  // const [size, setSize] = useState({ width: 100, height: 100 })
   const [isDragging, setIsDragging] = useState(false)
   const [isResizing, setIsResizing] = useState(false)
-  const [size, setSize] = useState({ height: 100, width: 100 })
-  const [position, setPosition] = useState({ x: 0, y: 0 })
-  const [translate, setTranslate] = useState({ x: 0, y: 0 })
+  const [size, setSize] = useState({ height: props.size.x, width: props.size.y })
+  const [translate, setTranslate] = useState({ x: props.defaultPosition.x, y: props.defaultPosition.y })
   const [diff, setDiff] = useState({ x: 0, y: 0 })
-  const [resizingClick, setResizingClick] = useState({x: 0, y: 0})
+  const [resizingClick, setResizingClick] = useState({ x: 0, y: 0 })
   const [directions, setDirections] = useState(null)
 
   useEffect(() => {
@@ -38,14 +36,14 @@ const Draggable = (props) => {
     }
   }, [isResizing])
 
-  const round = (p, n) => {
+  const snapTo = (p, n) => {
     return p % n < n / 2 ? p - (p % n) : p + n - (p % n)
   }
 
   const handleMouseDownResizing = (e) => {
     e.stopPropagation()
     setIsResizing(true)
-    setResizingClick({x: e.clientX, y: e.clientY})
+    setResizingClick({ x: e.clientX, y: e.clientY })
     setDirections(Array.from(e.target.classList))
   }
 
@@ -73,17 +71,16 @@ const Draggable = (props) => {
     else if (directions.includes('bottom')) {
       height += diffY
     }
-    translateX = round(translateX, props.cellSize)
-    translateY = round(translateY, props.cellSize)
-    height = round(height, props.cellSize)
-    width = round(width, props.cellSize)
-    setSize({width, height})
-    setTranslate({x: translateX, y: translateY})
-    setResizingClick({x: resizingClickX, y: resizingClickY})
+    translateX = snapTo(translateX, props.grid.x)
+    translateY = snapTo(translateY, props.grid.y)
+    width = snapTo(width, props.grid.x)
+    height = snapTo(height, props.grid.y)
+    setSize({ width, height })
+    setTranslate({ x: translateX, y: translateY })
+    setResizingClick({ x: resizingClickX, y: resizingClickY })
   }
 
   const handleMouseUpResizing = () => {
-    console.log('handle mouse up resizing')
     window.removeEventListener('mousemove', handleMouseMoveResizing)
     window.removeEventListener('mouseup', handleMouseUpResizing)
     setIsResizing(false)
@@ -97,29 +94,26 @@ const Draggable = (props) => {
   }, [isDragging])
 
   const handleMouseDownDragging = ({ clientX, clientY }) => {
-    setDiff({x: clientX - position.x, y: clientY - position.y})
+    setDiff({ x: clientX - translate.x, y: clientY - translate.y })
     setIsDragging(true)
   }
 
-  const handleMouseMoveDragging = ({ clientX, clientY }) => {
+  const handleMouseMoveDragging = (e) => {
+    e.preventDefault()
     setTranslate({
-      x: round(clientX - diff.x, props.cellSize),
-      y: round(clientY - diff.y, props.cellSize)
+      x: snapTo(e.clientX - diff.x, props.grid.x),
+      y: snapTo(e.clientY - diff.y, props.grid.y)
     })
   }
 
-  const handleMouseUpDragging = ({ clientX, clientY }) => {
+  const handleMouseUpDragging = () => {
     window.removeEventListener('mousemove', handleMouseMoveDragging)
     window.removeEventListener('mouseup', handleMouseUpDragging)
-    setPosition({
-      x: round(clientX - diff.x, props.cellSize),
-      y: round(clientY - diff.y, props.cellSize)
-    })
     setIsDragging(false)
   }
 
   return (
-    <Container
+    <DraggableContainer
       width={size.width}
       height={size.height}
       onMouseDown={handleMouseDownDragging}
@@ -142,9 +136,17 @@ const Draggable = (props) => {
         </div>
       </div>
       {props.children}
-    </Container>
+    </DraggableContainer>
   )
 }
 
+Draggable.defaultProps = {
+  grid: { x: 20, y: 20 },
+  defaultPosition: { x: 20, y: 40 },
+  size: { x: 100, y: 100 },
+  minSize: { x: 20, y: 20 },
+  maxSize: { x: 150, y: 150 },
+  bounds: { left: 0, top: 0, right: 0, bottom: 0 }
+}
 
 export default Draggable
