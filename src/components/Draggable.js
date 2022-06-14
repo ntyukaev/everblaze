@@ -85,13 +85,24 @@ const Draggable = (props) => {
     else if (directions.includes('bottom')) {
       height += diffY
     }
+    const testing = x - 1
     x = snapTo(x, props.grid.x)
+    
     y = snapTo(y, props.grid.y)
     width = snapTo(Math.min(props.maxSize.x, Math.max(width, props.minSize.x)), props.grid.x)
     height = snapTo(Math.min(props.maxSize.y, Math.max(height, props.minSize.y)), props.grid.y)
     setObjectState(prevData => {
+      console.log(diffX, e.clientX - prevData.lastResizingPosX, x, prevData.x)
       if (width === snapTo(props.minSize.x, props.grid.x) || width === snapTo(props.maxSize.x, props.grid.x)) {
-        x = prevData.x
+        // console.log(prevData.width)
+        // console.log(props.maxSize.x)
+        if (directions.includes('left') && prevData.width < props.maxSize.x && diffX < 0) {
+          console.log(diffX, e.clientX - prevData.lastResizingPosX, x)
+          x = snapTo(testing, props.grid.x)
+        }
+        else {
+          x = prevData.x
+        }
       }
       if (height === snapTo(props.minSize.y, props.grid.y) || height === snapTo(props.maxSize.y, props.grid.y)) {
         y = prevData.y
