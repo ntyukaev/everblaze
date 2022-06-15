@@ -42,7 +42,7 @@ const Draggable = (props) => {
     }
   }, [isResizing])
 
-  const snapTo = (p, n) => {
+  const snapToGrid = (p, n) => {
     return p % n < n / 2 ? p - (p % n) : p + n - (p % n)
   }
 
@@ -63,13 +63,13 @@ const Draggable = (props) => {
     e.preventDefault()
     const lastResizingPosX = e.clientX
     const lastResizingPosY = e.clientY
+    const directions = objectState.resizingDirections
     const diffX = lastResizingPosX - objectState.lastResizingPosX
     const diffY = lastResizingPosY - objectState.lastResizingPosY
     let width = objectState.width
     let height = objectState.height
     let x = objectState.x
     let y = objectState.y
-    let directions = objectState.resizingDirections
 
     if (directions.includes('left')) {
       x += diffX
@@ -78,6 +78,7 @@ const Draggable = (props) => {
     else if (directions.includes('right')) {
       width += diffX
     }
+
     if (directions.includes('top')) {
       y += diffY
       height -= diffY
@@ -85,29 +86,60 @@ const Draggable = (props) => {
     else if (directions.includes('bottom')) {
       height += diffY
     }
-    const testing = x - 1
-    x = snapTo(x, props.grid.x)
-    
-    y = snapTo(y, props.grid.y)
-    width = snapTo(Math.min(props.maxSize.x, Math.max(width, props.minSize.x)), props.grid.x)
-    height = snapTo(Math.min(props.maxSize.y, Math.max(height, props.minSize.y)), props.grid.y)
-    setObjectState(prevData => {
-      console.log(diffX, e.clientX - prevData.lastResizingPosX, x, prevData.x)
-      if (width === snapTo(props.minSize.x, props.grid.x) || width === snapTo(props.maxSize.x, props.grid.x)) {
-        // console.log(prevData.width)
-        // console.log(props.maxSize.x)
-        if (directions.includes('left') && prevData.width < props.maxSize.x && diffX < 0) {
-          console.log(diffX, e.clientX - prevData.lastResizingPosX, x)
-          x = snapTo(testing, props.grid.x)
-        }
-        else {
-          x = prevData.x
-        }
+
+    setObjectState(prevObjectState => {
+      x = snapToGrid(x, props.grid.x)
+      y = snapToGrid(y, props.grid.y)
+      if (width % props.grid.x === props.grid.x / 2) {
+        width = width - 1
       }
-      if (height === snapTo(props.minSize.y, props.grid.y) || height === snapTo(props.maxSize.y, props.grid.y)) {
-        y = prevData.y
+      if (height % props.grid.y === props.grid.y / 2) {
+        height = height - 1
       }
-      return { ...prevData, width, height, x, y, lastResizingPosX, lastResizingPosY }
+
+      width = Math.min(width, props.maxSize.x)
+      width = Math.max(width, props.minSize.x)
+      width = snapToGrid(width, props.grid.x)
+
+      height = Math.min(height, props.maxSize.y)
+      height = Math.max(height, props.minSize.y)
+      height = snapToGrid(height, props.grid.y)
+
+      if (width === prevObjectState.width) {
+        x = prevObjectState.x
+      }
+
+      if (height === prevObjectState.height) {
+        y = prevObjectState.y
+      }
+
+      if (prevObjectState.x === props.bounds.left && diffX < 0 && directions.includes('left')) {
+        x = prevObjectState.x
+        width = prevObjectState.width
+      }
+
+      if (prevObjectState.x === props.bounds.right - prevObjectState.width && diffX > 0 && directions.includes('right')) {
+        x = prevObjectState.x
+        width = prevObjectState.width
+      }
+
+      if (prevObjectState.y === props.bounds.top && diffY < 0 && directions.includes('top')) {
+        y = prevObjectState.y
+        height = prevObjectState.height
+      }
+
+      if (prevObjectState.y === props.bounds.bottom - prevObjectState.height && diffY > 0 && directions.includes('bottom')) {
+        y = prevObjectState.y
+        height = prevObjectState.height
+      }
+
+      return {
+        ...prevObjectState,
+        x,
+        y,
+        width,
+        height
+      }
     })
   }
 
@@ -138,10 +170,14 @@ const Draggable = (props) => {
   const handleMouseMoveDragging = (e) => {
     e.preventDefault()
     setObjectState(prevObjectState => {
+      let x = snapToGrid(e.clientX - prevObjectState.dragDiffX, props.grid.x)
+      let y = snapToGrid(e.clientY - prevObjectState.dragDiffY, props.grid.y)
+      x = Math.max(x, props.bounds.left)
+      x = Math.min(x, props.bounds.right - prevObjectState.width)
+      y = Math.max(y, props.bounds.top)
+      y = Math.min(y, props.bounds.bottom - prevObjectState.height)
       return {
-        ...prevObjectState,
-        x: snapTo(e.clientX - prevObjectState.dragDiffX, props.grid.x),
-        y: snapTo(e.clientY - prevObjectState.dragDiffY, props.grid.y)
+        ...prevObjectState, x, y
       }
     })
   }
@@ -186,7 +222,7 @@ Draggable.defaultProps = {
   size: { x: 100, y: 100 },
   minSize: { x: 40, y: 40 },
   maxSize: { x: 160, y: 160 },
-  bounds: { left: 0, top: 0, right: 0, bottom: 0 }
+  bounds: { left: 0, top: 0, right: 700, bottom: 200 }
 }
 
 export default Draggable
