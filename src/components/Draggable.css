@@ -1,6 +1,3 @@
-/* .resizable {
-    position: relative;
-} */
 .resizer {
     position: absolute;
 }
@@ -12,7 +9,6 @@
 }
 
 /* Angles */
-
 .angles > .resizer {
     border: 3px solid #4286f4;
     border-radius: 50%;
@@ -43,7 +39,6 @@
 }
 
 /* Lines */
-
 .lines > .resizer {
     background-color: #4286f4;
 }
@@ -68,7 +63,6 @@
     right: -1px;
     cursor: ew-resize;
 }
-
 
 .lines > .resizer.bottom {
     width: 100%;
