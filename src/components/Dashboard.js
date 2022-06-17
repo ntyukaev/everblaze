@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import styled from 'styled-components'
 import _ from 'lodash'
 import './Dashboard.css'
@@ -23,7 +23,7 @@ const createGrid = (width, height, resolution) => {
     line.setAttribute('x2', e * resolution)
     line.setAttribute('y1', 0)
     line.setAttribute('y2', height)
-    line.setAttribute('stroke', 'black')
+    line.setAttribute('stroke', 'rgb(212, 212, 212)')
     line.setAttribute('stroke-width', '1px')
     svg.append(line)
   })
@@ -56,11 +56,22 @@ const DashboardContainer = styled.div.attrs(({ width, height, resolution }) => (
   `
 
 const Dashboard = () => {
-  const [width, setWidth] = useState(870)
-  const [height, setHeight] = useState(500)
-  const [resolution, setResolution] = useState(20)
+  const ref = useRef(null)
+  const [width, setWidth] = useState(0)
+  const [height, setHeight] = useState(0)
+  const [resolution, setResolution] = useState(0)
+
+  useEffect(() => {
+    const height = ref.current.parentElement.offsetHeight
+    const width = ref.current.parentElement.offsetWidth
+    const resolution = width / 80
+    setHeight(height)
+    setWidth(width)
+    setResolution(resolution)
+  }, [])
+
   return (
-    <DashboardContainer width={width} height={height} resolution={resolution}>
+    <DashboardContainer ref={ref} width={width} height={height} resolution={resolution}>
       <ChartContainer
         grid={{ x: resolution, y: resolution }}
         bounds={{ left: 0, top: 0, right: width, bottom: height }}

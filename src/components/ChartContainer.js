@@ -3,6 +3,7 @@ import './ChartContainer.css'
 import ChartExample from './ChartExample'
 
 const ChartContainer = ({ grid, bounds }) => {
+  console.log(grid.x, grid.y)
   return (
     <Draggable
       grid={grid}

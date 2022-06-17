@@ -1,10 +1,5 @@
 import React from 'react'
-import { Layout, Card } from 'antd'
-import {
-  AreaChartOutlined,
-  PieChartOutlined,
-  BarChartOutlined,
-  DotChartOutlined } from '@ant-design/icons'
+import { Layout } from 'antd'
 import 'antd/dist/antd.css'
 import Dashboard from './components/Dashboard'
 
@@ -12,11 +7,11 @@ const { Header, Content, Footer, Sider } = Layout
 
 const App = () => {
   return (
-    <Layout hasSider>
+    <Layout className='main-wrapper' hasSider>
       <Layout
         className="site-layout"
         style={{
-          marginRight: 200,
+          marginRight: 120,
         }}
       >
         <Header
@@ -29,6 +24,8 @@ const App = () => {
           style={{
             margin: '0',
             overflow: 'initial',
+            width: '100%',
+            height: '100%'
           }}
         >
           <Dashboard />
@@ -42,6 +39,8 @@ const App = () => {
         </Footer>
       </Layout>
       <Sider
+        theme='light'
+        width={120}
         style={{
           overflow: 'auto',
           height: '100vh',
@@ -51,27 +50,7 @@ const App = () => {
           bottom: 0,
         }}
       >
-        <Card
-          title="Chart Types"
-          bordered={false}
-          style={{
-            width: 300,
-          }}
-        >
-          <AreaChartOutlined />
-          <PieChartOutlined />
-          <BarChartOutlined />
-          <DotChartOutlined />
-        </Card>
-        <Card
-          title="Data Fields"
-          bordered={false}
-          style={{
-            width: 300,
-          }}
-        >
-          Data Fields
-        </Card>
+        
       </Sider>
     </Layout>
   );

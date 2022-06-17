@@ -37,6 +37,16 @@ const Draggable = (props) => {
   })
 
   useEffect(() => {
+    setObjectState({
+      ...objectState,
+      width: props.size.x,
+      height: props.size.y,
+      x: props.defaultPosition.x,
+      y: props.defaultPosition.y
+    })
+  }, [props.size.x, props.size.y, props.defaultPosition.x, props.defaultPosition.y])
+
+  useEffect(() => {
     if (isResizing) {
       window.addEventListener('mousemove', handleMouseMoveResizing)
       window.addEventListener('mouseup', handleMouseUpResizing)
