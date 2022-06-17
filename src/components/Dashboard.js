@@ -65,6 +65,10 @@ const Dashboard = () => {
         grid={{ x: resolution, y: resolution }}
         bounds={{ left: 0, top: 0, right: width, bottom: height }}
       />
+      <ChartContainer
+        grid={{ x: resolution, y: resolution }}
+        bounds={{ left: 0, top: 0, right: width, bottom: height }}
+      />
     </DashboardContainer>
   )
 }

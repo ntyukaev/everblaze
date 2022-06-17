@@ -1,15 +1,17 @@
 import Draggable from './Draggable'
 import './ChartContainer.css'
-
+import ChartExample from './ChartExample'
 
 const ChartContainer = ({ grid, bounds }) => {
   return (
     <Draggable
       grid={grid}
       bounds={bounds}
-      minSize={{ x: grid.x * 2, y: grid.y * 2 }}
-      >
-      <div className='ChartContainer'></div>
+      size={{ x: grid.x * 20, y: grid.y * 10 }}
+      minSize={{ x: grid.x * 20, y: grid.y * 10 }}
+      maxSize={{ x: grid.x * 40, y: grid.y * 20 }}
+    >
+      <ChartExample />
     </Draggable>
   )
 }

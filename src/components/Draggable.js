@@ -17,15 +17,16 @@ const DraggableContainer = styled.div.attrs(({ x, y, width, height }) => ({
     `
   }
   display: inline-block;
-  position: relative;
+  position: absolute;
+  background: white;
 `
 
 const Draggable = (props) => {
   const [isDragging, setIsDragging] = useState(false)
   const [isResizing, setIsResizing] = useState(false)
   const [objectState, setObjectState] = useState({
-    height: props.size.x,
-    width: props.size.y,
+    width: props.size.x,
+    height: props.size.y,
     x: props.defaultPosition.x,
     y: props.defaultPosition.y,
     lastResizingPosX: null,
@@ -205,7 +206,7 @@ const Draggable = (props) => {
 
 Draggable.defaultProps = {
   grid: { x: 20, y: 20 },
-  defaultPosition: { x: 20, y: 40 },
+  defaultPosition: { x: 0, y: 0 },
   size: { x: 100, y: 100 },
   minSize: { x: 40, y: 40 },
   maxSize: { x: 160, y: 160 },
