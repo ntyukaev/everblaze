@@ -56,7 +56,7 @@ const DashboardContainer = styled.div.attrs(({ width, height, resolution }) => (
   `
 
 const Dashboard = () => {
-  const [width, setWidth] = useState(1000)
+  const [width, setWidth] = useState(870)
   const [height, setHeight] = useState(500)
   const [resolution, setResolution] = useState(20)
   return (
