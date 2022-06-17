@@ -41,17 +41,14 @@ const createGrid = (width, height, resolution) => {
     svg.append(line)
   })
 
-  return svg.outerHTML
+  return btoa(svg.outerHTML)
 }
-
-let test = createGrid(1000, 500, 20)
-console.log(test)
 
 const DashboardContainer = styled.div.attrs(({ width, height, resolution }) => ({
   style: {
     width: `${width}px`,
     height: `${height}px`,
-    backgroundImage: `url('data:image/svg+xml;utf8,${createGrid(width, height, resolution)}')`
+    backgroundImage: `url('data:image/svg+xml;base64,${createGrid(width, height, resolution)}')`
   }
 }))`
     position: relative;
