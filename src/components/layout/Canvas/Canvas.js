@@ -1,5 +1,5 @@
 import { Layout } from 'antd'
-import Dashboard from "../Dashboard"
+import Dashboard from "./Dashboard.js"
 
 const { Content } = Layout
 

@@ -1,4 +1,4 @@
-import Draggable from './Draggable'
+import Draggable from '../common/Draggable'
 import './ChartContainer.css'
 import ChartExample from './ChartExample'
 

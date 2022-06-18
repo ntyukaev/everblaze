@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import styled from 'styled-components'
 import _ from 'lodash'
 import './Dashboard.css'
-import ChartContainer from './ChartContainer'
+import ChartContainer from '../../charts/ChartContainer'
 
 const createGrid = (width, height, resolution) => {
   const svg = document.createElement('svg')
