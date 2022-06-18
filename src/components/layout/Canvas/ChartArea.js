@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
+import { useSelector } from "react-redux"
 import styled from 'styled-components'
 import _ from 'lodash'
-import './Dashboard.css'
 import ChartContainer from '../../charts/ChartContainer'
 
 const createGrid = (width, height, resolution) => {
@@ -44,7 +44,7 @@ const createGrid = (width, height, resolution) => {
   return btoa(svg.outerHTML)
 }
 
-const DashboardContainer = styled.div.attrs(({ width, height, resolution }) => ({
+const ChartAreaContainer = styled.div.attrs(({ width, height, resolution }) => ({
   style: {
     width: `${width}px`,
     height: `${height}px`,
@@ -55,7 +55,8 @@ const DashboardContainer = styled.div.attrs(({ width, height, resolution }) => (
     border: 1px solid black;
   `
 
-const Dashboard = () => {
+const ChartArea = () => {
+  const charts = useSelector((state) => state.chartConfig.charts)
   const ref = useRef(null)
   const [width, setWidth] = useState(0)
   const [height, setHeight] = useState(0)
@@ -71,18 +72,26 @@ const Dashboard = () => {
   }, [])
 
   return (
-    <DashboardContainer ref={ref} width={width} height={height} resolution={resolution}>
-      <ChartContainer
+    <ChartAreaContainer ref={ref} width={width} height={height} resolution={resolution}>
+      {charts.map(chart => (
+        <ChartContainer
+          key={chart.id}
+          {...chart}
+          grid={{ x: resolution, y: resolution }}
+          bounds={{ left: 0, top: 0, right: width, bottom: height }}
+        />
+      ))}
+      {/* <ChartContainer
         grid={{ x: resolution, y: resolution }}
         bounds={{ left: 0, top: 0, right: width, bottom: height }}
       />
       <ChartContainer
         grid={{ x: resolution, y: resolution }}
         bounds={{ left: 0, top: 0, right: width, bottom: height }}
-      />
-    </DashboardContainer>
+      /> */}
+    </ChartAreaContainer>
   )
 }
 
 
-export default Dashboard
+export default ChartArea

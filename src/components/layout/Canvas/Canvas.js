@@ -1,5 +1,5 @@
 import { Layout } from 'antd'
-import Dashboard from "./Dashboard.js"
+import ChartArea from "./ChartArea.js"
 
 const { Content } = Layout
 
@@ -13,7 +13,7 @@ const Canvas = () => {
         height: '100%'
       }}
     >
-      <Dashboard />
+      <ChartArea />
     </Content>
   )
 }

@@ -1,4 +1,4 @@
 import { combineReducers } from "redux"
-import configureChart from "./configureChart"
+import configureCharts from "./configureCharts"
 
-export default combineReducers({ chartConfig: configureChart })
+export default combineReducers({ chartConfig: configureCharts })

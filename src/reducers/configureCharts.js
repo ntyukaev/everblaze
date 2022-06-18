@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit/"
 
 const initialState = {
-    selectedChart: null
+    selectedChart: null,
+    charts: []
 }
 
 export const selectedChartSlice = createSlice({
@@ -13,10 +14,14 @@ export const selectedChartSlice = createSlice({
         },
         deselectChart: (state) => {
             state.selectedChart = null
+        },
+        addChart: (state, action) => {
+            state.charts.push(action.payload)
         }
     }
 })
 
-export const { selectChart, deselectChart } = selectedChartSlice.actions
+export const { selectChart, deselectChart, addChart } = selectedChartSlice.actions
+
 
 export default selectedChartSlice.reducer

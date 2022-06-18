@@ -1,4 +1,5 @@
 import { Layout } from 'antd'
+import ChartSelection from './ChartSelection'
 
 const { Sider } = Layout
 
@@ -16,6 +17,7 @@ const RightMenu = () => {
         bottom: 0,
       }}
     >
+      <ChartSelection/>
     </Sider>
   )
 }
