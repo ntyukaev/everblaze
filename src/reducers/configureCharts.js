@@ -12,7 +12,7 @@ export const selectedChartSlice = createSlice({
         selectChart: (state, action) => {
             state.selectedChart = action.payload
         },
-        deselectChart: (state) => {
+        unselectChart: (state) => {
             state.selectedChart = null
         },
         addChart: (state, action) => {
@@ -21,7 +21,7 @@ export const selectedChartSlice = createSlice({
     }
 })
 
-export const { selectChart, deselectChart, addChart } = selectedChartSlice.actions
+export const { selectChart, unselectChart, addChart } = selectedChartSlice.actions
 
 
 export default selectedChartSlice.reducer

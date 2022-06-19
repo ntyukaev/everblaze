@@ -58,6 +58,9 @@ const Draggable = (props) => {
   }
 
   const handleMouseDownResizing = (e) => {
+    if (props.onMouseDown) {
+      props.onMouseDown()
+    }
     e.stopPropagation()
     setIsResizing(true)
     setObjectState(prevObjectState => {
@@ -154,10 +157,13 @@ const Draggable = (props) => {
     })
   }
 
-  const handleMouseUpResizing = () => {
+  const handleMouseUpResizing = (e) => {
     window.removeEventListener('mousemove', handleMouseMoveResizing)
     window.removeEventListener('mouseup', handleMouseUpResizing)
     setIsResizing(false)
+    if (props.onMouseUp) {
+      props.onMouseUp(e)
+    }
   }
 
   useEffect(() => {
@@ -168,6 +174,9 @@ const Draggable = (props) => {
   }, [isDragging])
 
   const handleMouseDownDragging = ({ clientX, clientY }) => {
+    if (props.onMouseDown) {
+      props.onMouseDown()
+    }
     setObjectState(prevObjectState => {
       return {
         ...prevObjectState,
@@ -180,6 +189,10 @@ const Draggable = (props) => {
 
   const handleMouseMoveDragging = (e) => {
     e.preventDefault()
+    console.log(props.canBeResized)
+    if (props.onMouseMove) {
+      props.onMouseMove()
+    }
     setObjectState(prevObjectState => {
       let x = snapToGrid(e.clientX - prevObjectState.dragDiffX, props.grid.x)
       let y = snapToGrid(e.clientY - prevObjectState.dragDiffY, props.grid.y)
@@ -193,10 +206,19 @@ const Draggable = (props) => {
     })
   }
 
-  const handleMouseUpDragging = () => {
+  const handleMouseUpDragging = (e) => {
     window.removeEventListener('mousemove', handleMouseMoveDragging)
     window.removeEventListener('mouseup', handleMouseUpDragging)
     setIsDragging(false)
+    if (props.onMouseUp) {
+      props.onMouseUp(e)
+    }
+  }
+  
+  const handleOnClick = (e) => {
+    if (props.onClick) {
+      props.onClick(e)
+    }
   }
 
   return (
@@ -204,11 +226,12 @@ const Draggable = (props) => {
       width={objectState.width}
       height={objectState.height}
       onMouseDown={handleMouseDownDragging}
+      onClick={handleOnClick}
       x={objectState.x}
       y={objectState.y}
       isDragging={isDragging}
       className="draggable">
-      <Resizable onMouseDown={handleMouseDownResizing} />
+      { props.canBeResized && <Resizable onMouseDown={handleMouseDownResizing} /> }
       {props.children}
     </DraggableContainer>
   )
