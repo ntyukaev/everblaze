@@ -21,7 +21,6 @@ const ChartSelection = () => {
 
   return (
     <Card size="small" title="Select Chart">
-      <div>Selected Chart: {selectedChart}</div>
       <div className='chart-types' onClick={chooseChartType}>
         {Object.keys(chartTypes).map((ch) => (
           <div key={ch} className={ch}>{ch}</div>  
