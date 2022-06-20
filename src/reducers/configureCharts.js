@@ -16,7 +16,6 @@ export const selectedChartSlice = createSlice({
       state.selectedChart = null
     },
     addChart: (state, action) => {
-      console.log('add chart')
       state.charts.push(action.payload)
     },
     updateChart: (state, action) => {

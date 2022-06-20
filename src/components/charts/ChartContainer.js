@@ -10,23 +10,9 @@ const ChartContainer = ({ grid, bounds, type, id }) => {
   const selectedChart = useSelector((state) => state.chartConfig.selectedChart)
   const isSelected = selectedChart === id
   const Chart = chartTypes[type]
-
-  useEffect(() => {
-    const chartArea = document.querySelector('.chart-area')
-    if (isSelected) {
-      chartArea.addEventListener('mousedown', unselect)
-    }
-    else {
-      chartArea.removeEventListener('mousedown', unselect)
-    }
-  }, [isSelected])
   
   const select = () => {
     dispatch(selectChart(id))
-  }
-
-  const unselect = () => {
-    dispatch(unselectChart())
   }
 
   return (

@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import styled from 'styled-components'
 import _ from 'lodash'
+import { unselectChart } from "../../../reducers/configureCharts"
 import ChartContainer from '../../charts/ChartContainer'
 
 const createGrid = (width, height, resolution) => {
@@ -56,11 +57,27 @@ const ChartAreaContainer = styled.div.attrs(({ width, height, resolution }) => (
   `
 
 const ChartArea = () => {
-  const charts = useSelector((state) => state.chartConfig.charts)
   const ref = useRef(null)
+  const dispatch = useDispatch()
+  const charts = useSelector((state) => state.chartConfig.charts)
+  const selectedChart = useSelector((state) => state.chartConfig.selectedChart)
   const [width, setWidth] = useState(0)
   const [height, setHeight] = useState(0)
   const [resolution, setResolution] = useState(0)
+
+  useEffect(() => {
+    if (selectedChart != null) {
+      ref.current.addEventListener('mouseup', unselect)
+    }
+    else {
+      ref.current.removeEventListener('mouseup', unselect)
+    }
+  }, [selectedChart])
+
+  const unselect = () => {
+    ref.current.removeEventListener('mouseup', unselect)
+    dispatch(unselectChart())
+  }
 
   useEffect(() => {
     const height = ref.current.parentElement.offsetHeight
