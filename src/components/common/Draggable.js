@@ -75,6 +75,9 @@ const Draggable = (props) => {
 
   const handleMouseMoveResizing = (e) => {
     e.preventDefault()
+    if (props.onMouseMove) {
+      props.onMouseMove(e)
+    }
     const lastResizingPosX = e.clientX
     const lastResizingPosY = e.clientY
     const directions = objectState.resizingDirections
@@ -189,7 +192,6 @@ const Draggable = (props) => {
 
   const handleMouseMoveDragging = (e) => {
     e.preventDefault()
-    console.log(props.canBeResized)
     if (props.onMouseMove) {
       props.onMouseMove()
     }

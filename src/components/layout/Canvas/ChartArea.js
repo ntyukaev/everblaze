@@ -72,7 +72,7 @@ const ChartArea = () => {
   }, [])
 
   return (
-    <ChartAreaContainer ref={ref} width={width} height={height} resolution={resolution}>
+    <ChartAreaContainer className='chart-area' ref={ref} width={width} height={height} resolution={resolution}>
       {charts.map(chart => (
         <ChartContainer
           key={chart.id}

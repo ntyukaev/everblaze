@@ -12,11 +12,12 @@ const ChartContainer = ({ grid, bounds, type, id }) => {
   const Chart = chartTypes[type]
 
   useEffect(() => {
+    const chartArea = document.querySelector('.chart-area')
     if (isSelected) {
-      window.addEventListener('mousedown', unselect)
+      chartArea.addEventListener('mousedown', unselect)
     }
     else {
-      window.removeEventListener('mousedown', unselect)
+      chartArea.removeEventListener('mousedown', unselect)
     }
   }, [isSelected])
   
