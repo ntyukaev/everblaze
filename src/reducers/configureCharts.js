@@ -5,7 +5,7 @@ const initialState = {
   charts: []
 }
 
-export const selectedChartSlice = createSlice({
+export const chartConfigSlice = createSlice({
   name: 'chartConfig',
   initialState,
   reducers: {
@@ -24,7 +24,6 @@ export const selectedChartSlice = createSlice({
   }
 })
 
-export const { selectChart, unselectChart, addChart, updateChart } = selectedChartSlice.actions
+export const { selectChart, unselectChart, addChart, updateChart } = chartConfigSlice.actions
 
-
-export default selectedChartSlice.reducer
+export default chartConfigSlice.reducer
