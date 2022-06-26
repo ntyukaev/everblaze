@@ -90,22 +90,15 @@ const ChartArea = () => {
 
   return (
     <ChartAreaContainer className='chart-area' ref={ref} width={width} height={height} resolution={resolution}>
-      {charts.map(chart => (
+      {Object.keys(charts).map(key => (
         <ChartContainer
-          key={chart.id}
-          {...chart}
+          key={key}
+          id={key}
+          {...charts[key]}
           grid={{ x: resolution, y: resolution }}
           bounds={{ left: 0, top: 0, right: width, bottom: height }}
         />
       ))}
-      {/* <ChartContainer
-        grid={{ x: resolution, y: resolution }}
-        bounds={{ left: 0, top: 0, right: width, bottom: height }}
-      />
-      <ChartContainer
-        grid={{ x: resolution, y: resolution }}
-        bounds={{ left: 0, top: 0, right: width, bottom: height }}
-      /> */}
     </ChartAreaContainer>
   )
 }

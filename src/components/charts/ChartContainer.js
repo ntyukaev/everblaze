@@ -1,6 +1,5 @@
-import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { unselectChart, selectChart } from '../../reducers/configureCharts'
+import { selectChart } from '../../reducers/configureCharts'
 import Draggable from '../common/Draggable'
 import chartTypes from './chartTypes'
 import './ChartContainer.css'

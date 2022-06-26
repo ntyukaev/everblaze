@@ -4,7 +4,8 @@ import { dndTypes } from "./dndTypes"
 
 const ChartInputField = ({ chartInputFieldName }) => {
   const selectedChart = useSelector((state) => state.chartConfig.selectedChart)
-  const fields = useSelector((state) => state.datasetConfig.fields)
+  const charts = useSelector((state) => state.chartConfig.charts)
+  const fields = useSelector((state) => state.chartConfig.fields)
   const [{ canDrop, isOver }, drop] = useDrop(
     () => ({
       accept: dndTypes.FIELD,
@@ -22,8 +23,13 @@ const ChartInputField = ({ chartInputFieldName }) => {
   return (
     <div ref={drop}>
       <div>{chartInputFieldName}</div>
-      {isActive ? 'Release to drop' : 'Drag a box here'}
+      {
+        charts[selectedChart].fields.filter(([, axis]) => axis === chartInputFieldName).map(([fieldId,]) => (
+          <div>{fields[fieldId].name}</div>
+        ))
+      }
     </div>
   )
 }
+
 export default ChartInputField

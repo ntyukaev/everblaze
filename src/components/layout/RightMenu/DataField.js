@@ -1,20 +1,21 @@
 import { useDispatch } from "react-redux"
 import { useDrag } from "react-dnd"
-import { updateField } from "../../../reducers/configureDatasets"
+import { attachFieldToChart } from "../../../reducers/configureCharts"
 import { dndTypes } from "./dndTypes"
 
-const DataField = ({ name, index }) => {
+const DataField = ({ name, fieldId }) => {
   const dispatch = useDispatch()
   const [{ opacity }, drag] = useDrag(() => ({
     type: dndTypes.FIELD,
-    item: { name, index },
+    item: { name, fieldId },
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult()
       if (dropResult) {
-        dispatch(updateField({
+        console.log(item.fieldId)
+        dispatch(attachFieldToChart({
           axis: dropResult.chartInputFieldName,
-          chart: dropResult.selectedChart,
-          index: item.index
+          chartId: dropResult.selectedChart,
+          fieldId: item.fieldId
         }))
       }
     },
