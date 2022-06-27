@@ -1,10 +1,10 @@
 import { Card } from 'antd'
-import ChartInputField from './ChartInputField'
+import ChartField from './ChartField'
 
 const ChartInput = () => {
   return (
     <Card className='chart-input' size="small" title="Chart Input">
-      <ChartInputField chartInputFieldName='X-axis'/>
+      <ChartField chartInputFieldName='X-axis'/>
     </Card>
   )
 }

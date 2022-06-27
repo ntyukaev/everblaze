@@ -25,8 +25,8 @@ export const chartConfigSlice = createSlice({
     addChart: (state, action) => {
       state.charts[action.payload.id] = { type: action.payload.type, fields: [] }
     },
-    updateChart: (state, action) => {
-      state.charts[action.payload.id] = action.payload
+    setChartType: (state, action) => {
+      state.charts[action.payload.id].type = action.payload.type
     },
     attachFieldToChart: (state, action) => {
       state.charts[action.payload.chartId].fields.push([action.payload.fieldId, action.payload.axis])
@@ -34,6 +34,6 @@ export const chartConfigSlice = createSlice({
   }
 })
 
-export const { selectChart, unselectChart, addChart, updateChart, attachFieldToChart } = chartConfigSlice.actions
+export const { selectChart, unselectChart, addChart, setChartType, attachFieldToChart } = chartConfigSlice.actions
 
 export default chartConfigSlice.reducer

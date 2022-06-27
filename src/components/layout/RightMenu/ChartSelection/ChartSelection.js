@@ -1,17 +1,17 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid'
 import { Card } from 'antd'
-import chartTypes from '../../charts/chartTypes'
-import { addChart, selectChart, updateChart } from '../../../reducers/configureCharts'
+import chartTypes from '../../../charts/chartTypes'
+import { addChart, selectChart, setChartType } from '../../../../reducers/configureCharts'
 
 const ChartSelection = () => {
   const dispatch = useDispatch()
-  const charts = useSelector((state) => state.chartConfig.charts)
   const selectedChart = useSelector((state) => state.chartConfig.selectedChart)
+  
   const chooseChartType = (e) => {
     const chartType = e.target.className
     if (selectedChart != null) {
-      dispatch(updateChart({ type: chartType, id: selectedChart }))
+      dispatch(setChartType({ type: chartType, id: selectedChart }))
     }
     else {
       const id =  uuidv4()

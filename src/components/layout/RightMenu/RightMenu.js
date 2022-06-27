@@ -4,7 +4,7 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import ChartSelection from './ChartSelection'
 import ChartInput from './ChartInput'
-import DatasetSelection from './DatasetSelection'
+import DatasetList from './DatasetList'
 
 const { Sider } = Layout
 
@@ -25,7 +25,7 @@ const RightMenu = () => {
     >
       <DndProvider backend={HTML5Backend}>
         <ChartSelection />
-        <DatasetSelection />
+        <DatasetList />
         {selectedChart != null && <ChartInput />}
       </DndProvider>
     </Sider>
