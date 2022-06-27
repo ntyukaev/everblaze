@@ -1,11 +1,11 @@
 import BottomMenu from "./BottomMenu"
-import Canvas from "./Canvas"
+import ChartArea from "./ChartArea"
 import RightMenu from "./RightMenu"
 import TopMenu from "./TopMenu"
 
 export {
   BottomMenu,
-  Canvas,
+  ChartArea,
   RightMenu,
   TopMenu
 }

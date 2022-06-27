@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import _ from 'lodash'
 import { Layout } from 'antd'
 import { unselectChart } from "../../../reducers/configureCharts"
-import ChartContainer from "./charts/ChartContainer/ChartContainer"
+import ChartContainer from "./ChartContainer"
 
 const { Content } = Layout
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Layout } from 'antd'
-import { TopMenu, Canvas, RightMenu, BottomMenu } from './components/layout'
+import { TopMenu, ChartArea, RightMenu, BottomMenu } from './components/layout'
 import 'antd/dist/antd.css'
 
 const App = () => {
@@ -8,7 +8,7 @@ const App = () => {
     <Layout className='main-wrapper' hasSider>
       <Layout className="site-layout" style={{ marginRight: 120 }} >
         <TopMenu/>
-        <Canvas/>
+        <ChartArea/>
         <BottomMenu/>
       </Layout>
       <RightMenu/>
