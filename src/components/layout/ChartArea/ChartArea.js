@@ -44,7 +44,7 @@ const ChartArea = () => {
 
   useEffect(() => {
     const height = ref.current.parentElement.offsetHeight
-    const width = ref.current.parentElement.offsetWidth
+    const width = ref.current.offsetWidth
     const resolution = width / 4
     setHeight(height)
     setWidth(width)
@@ -58,7 +58,7 @@ const ChartArea = () => {
       width: '100%',
       height: '100%'
     }}>
-      <ChartAreaContainer className='chart-area' ref={ref} width={width} height={height} resolution={resolution}>
+      <ChartAreaContainer className='chart-area' ref={ref} height={height} resolution={resolution}>
         {Object.keys(charts).map(key => (
           <ChartContainer
             key={key}

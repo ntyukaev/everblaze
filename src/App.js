@@ -5,13 +5,13 @@ import 'antd/dist/antd.css'
 
 const App = () => {
   return (
-    <Layout className='main-wrapper' hasSider>
-      <Layout className="site-layout" style={{ marginRight: 120 }} >
-        <TopMenu/>
-        <ChartArea/>
-        <BottomMenu/>
+    <Layout className='main-wrapper'>
+      <TopMenu />
+      <Layout hasSider>
+        <ChartArea />
+        <RightMenu/>
       </Layout>
-      <RightMenu/>
+      <BottomMenu/>
     </Layout>
   );
 }
