@@ -19,8 +19,7 @@ const ChartField = ({ chartInputFieldName }) => {
       }),
     })
   )
-  console.log(charts)
-  console.log(selectedChart)
+
   const isActive = canDrop && isOver
   return (
     <div ref={drop}>

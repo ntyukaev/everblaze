@@ -53,10 +53,6 @@ const Draggable = (props) => {
     }
   }, [isResizing])
 
-  const snapToGrid = (p, n) => {
-    return p % n < n / 2 ? p - (p % n) : p + n - (p % n)
-  }
-
   const handleMouseDownResizing = (e) => {
     if (props.onMouseDown) {
       props.onMouseDown()
@@ -105,22 +101,11 @@ const Draggable = (props) => {
     }
 
     setObjectState(prevObjectState => {
-      x = snapToGrid(x, props.grid.x)
-      y = snapToGrid(y, props.grid.y)
-      if (width % props.grid.x === props.grid.x / 2) {
-        width = width - 1
-      }
-      if (height % props.grid.y === props.grid.y / 2) {
-        height = height - 1
-      }
-
       width = Math.min(width, props.maxSize.x)
       width = Math.max(width, props.minSize.x)
-      width = snapToGrid(width, props.grid.x)
 
       height = Math.min(height, props.maxSize.y)
       height = Math.max(height, props.minSize.y)
-      height = snapToGrid(height, props.grid.y)
 
       if (width === prevObjectState.width) {
         x = prevObjectState.x
@@ -145,7 +130,7 @@ const Draggable = (props) => {
         height = prevObjectState.height
       }
 
-      if (prevObjectState.y === props.bounds.bottom - prevObjectState.height && diffY > 0 && directions.includes('bottom')) {
+      if (prevObjectState.y === Math.round(props.bounds.bottom - prevObjectState.height) && diffY > 0 && directions.includes('bottom')) {
         y = prevObjectState.y
         height = prevObjectState.height
       }
@@ -196,8 +181,8 @@ const Draggable = (props) => {
       props.onMouseMove()
     }
     setObjectState(prevObjectState => {
-      let x = snapToGrid(e.clientX - prevObjectState.dragDiffX, props.grid.x)
-      let y = snapToGrid(e.clientY - prevObjectState.dragDiffY, props.grid.y)
+      let x = e.clientX - prevObjectState.dragDiffX
+      let y = e.clientY - prevObjectState.dragDiffY
       x = Math.max(x, props.bounds.left)
       x = Math.min(x, props.bounds.right - prevObjectState.width)
       y = Math.max(y, props.bounds.top)
@@ -240,7 +225,6 @@ const Draggable = (props) => {
 }
 
 Draggable.defaultProps = {
-  grid: { x: 20, y: 20 },
   defaultPosition: { x: 0, y: 0 },
   size: { x: 100, y: 100 },
   minSize: { x: 40, y: 40 },
