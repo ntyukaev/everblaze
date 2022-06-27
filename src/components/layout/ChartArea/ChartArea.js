@@ -2,10 +2,13 @@ import { useEffect, useRef, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import styled from 'styled-components'
 import _ from 'lodash'
+import { Layout } from 'antd'
 import { unselectChart } from "../../../reducers/configureCharts"
-import ChartContainer from '../../charts/ChartContainer'
+import ChartContainer from "./charts/ChartContainer/ChartContainer"
 
-const ChartAreaContainer = styled.div.attrs(({ width, height, resolution }) => ({
+const { Content } = Layout
+
+const ChartAreaContainer = styled.div.attrs(({ width, height }) => ({
   style: {
     width: `${width}px`,
     height: `${height}px`,
@@ -49,17 +52,24 @@ const ChartArea = () => {
   }, [])
 
   return (
-    <ChartAreaContainer className='chart-area' ref={ref} width={width} height={height} resolution={resolution}>
-      {Object.keys(charts).map(key => (
-        <ChartContainer
-          key={key}
-          id={key}
-          {...charts[key]}
-          resolution={resolution}
-          bounds={{ left: 0, top: 0, right: width, bottom: height }}
-        />
-      ))}
-    </ChartAreaContainer>
+    <Content style={{
+      margin: '0',
+      overflow: 'initial',
+      width: '100%',
+      height: '100%'
+    }}>
+      <ChartAreaContainer className='chart-area' ref={ref} width={width} height={height} resolution={resolution}>
+        {Object.keys(charts).map(key => (
+          <ChartContainer
+            key={key}
+            id={key}
+            {...charts[key]}
+            resolution={resolution}
+            bounds={{ left: 0, top: 0, right: width, bottom: height }}
+          />
+        ))}
+      </ChartAreaContainer>
+    </Content>
   )
 }
 

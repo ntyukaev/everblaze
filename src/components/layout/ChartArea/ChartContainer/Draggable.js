@@ -225,6 +225,7 @@ const Draggable = (props) => {
 }
 
 Draggable.defaultProps = {
+  grid: { x: 1, y: 1 },
   defaultPosition: { x: 0, y: 0 },
   size: { x: 100, y: 100 },
   minSize: { x: 40, y: 40 },

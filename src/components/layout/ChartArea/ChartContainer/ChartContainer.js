@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { selectChart } from '../../reducers/configureCharts'
-import Draggable from '../common/Draggable'
-import chartTypes from './chartTypes'
+import { selectChart } from '../../../../../reducers/configureCharts'
+import Draggable from './Draggable'
+import chartTypes from '../chartTypes'
 import './ChartContainer.css'
 
 const ChartContainer = ({ resolution, bounds, type, id }) => {
