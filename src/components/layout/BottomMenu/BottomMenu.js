@@ -1,15 +1,16 @@
-import { Layout } from 'antd'
+import { Layout, Row, Col } from 'antd'
+import PageList from './PageList'
 
 const { Footer } = Layout
 
 const BottomMenu = () => {
   return (
-    <Footer
-      style={{
-        textAlign: 'center',
-      }}
-    >
-      Footer
+    <Footer>
+      <Row>
+        <Col span={24}>
+          <PageList/>
+        </Col>
+      </Row>
     </Footer>
   )
 }
