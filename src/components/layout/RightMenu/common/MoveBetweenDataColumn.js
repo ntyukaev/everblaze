@@ -1,18 +1,17 @@
 import { useDispatch } from "react-redux"
 import { useDrag } from "react-dnd"
-import { attachFieldToChart } from "../../../../reducers/configureCharts"
+import { changeFieldAxis } from "../../../../reducers/configureCharts"
 import { dndTypes } from "./dndTypes"
 
-const DataColumn = ({ name, fieldId }) => {
+const MoveBetweenDataColumn = ({ name, fieldId }) => {
   const dispatch = useDispatch()
   const [{ opacity }, drag] = useDrag(() => ({
     type: dndTypes.FIELD,
     item: { name, fieldId },
     end: (item, monitor) => {
-      console.log('ive triggered for no fucking reason')
       const dropResult = monitor.getDropResult()
       if (dropResult) {
-        dispatch(attachFieldToChart({
+        dispatch(changeFieldAxis({
           axis: dropResult.chartInputFieldName,
           chartId: dropResult.selectedChart,
           fieldId: item.fieldId
@@ -33,4 +32,4 @@ const DataColumn = ({ name, fieldId }) => {
   )
 }
 
-export default DataColumn
+export default MoveBetweenDataColumn

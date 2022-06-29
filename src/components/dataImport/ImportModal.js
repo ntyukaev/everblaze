@@ -11,7 +11,6 @@ const ImportModal = () => {
   const importModalVisible = useSelector((state) => state.importModalConfig.importModalVisible)
 
   const customRequest = ({ onSuccess, onError, file }) => {
-    console.log(file)
     const reader = new FileReader()
     const rABS = !!reader.readAsBinaryString
     reader.onload = (e) => {
@@ -30,8 +29,6 @@ const ImportModal = () => {
           })
         })
         dispatch(addDataset({dataset, fields}))
-        console.log(dataset)
-        console.log(fields)
       })
       onSuccess(null)
     }

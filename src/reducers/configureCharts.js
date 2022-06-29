@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit/"
+import { v4 as uuidv4 } from 'uuid'
 
 const initialState = {
   selectedChart: null,
@@ -18,13 +19,23 @@ export const chartConfigSlice = createSlice({
       state.selectedChart = null
     },
     addChart: (state, action) => {
-      state.charts[action.payload.id] = { type: action.payload.type, fields: [] }
+      state.charts[action.payload.id] = { type: action.payload.type, fields: {} }
     },
     setChartType: (state, action) => {
       state.charts[action.payload.id].type = action.payload.type
     },
     attachFieldToChart: (state, action) => {
-      state.charts[action.payload.chartId].fields.push([action.payload.fieldId, action.payload.axis])
+      console.log('attach field to chart')
+      const id = uuidv4()
+      const { fieldId, axis, chartId } = action.payload
+      state.charts[chartId].fields[id] = {
+        axis,
+        fieldId
+      }
+    },
+    changeFieldAxis: (state, action) => {
+      const { fieldId, axis, chartId } = action.payload
+      state.charts[chartId].fields[fieldId].axis = axis
     },
     addDataset: (state, action) => {
       state.datasets.push(action.payload.dataset)
@@ -36,6 +47,14 @@ export const chartConfigSlice = createSlice({
   }
 })
 
-export const { selectChart, unselectChart, addChart, setChartType, attachFieldToChart, addDataset } = chartConfigSlice.actions
+export const {
+  addChart,
+  addDataset,
+  selectChart,
+  setChartType,
+  unselectChart,
+  changeFieldAxis,
+  attachFieldToChart
+} = chartConfigSlice.actions
 
 export default chartConfigSlice.reducer

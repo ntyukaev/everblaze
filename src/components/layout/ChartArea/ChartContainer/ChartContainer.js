@@ -8,7 +8,7 @@ const ChartContainer = ({ resolution, bounds, type, id }) => {
   const dispatch = useDispatch()
   const selectedChart = useSelector((state) => state.chartConfig.selectedChart)
   const isSelected = selectedChart === id
-  const Chart = chartTypes[type]
+  const Chart = chartTypes[type].component
   
   const select = () => {
     dispatch(selectChart(id))
