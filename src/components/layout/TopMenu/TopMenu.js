@@ -1,4 +1,5 @@
 import { Layout, Row, Col } from 'antd'
+import ImportData from './ImportData'
 import './TopMenu.css'
 
 const { Header } = Layout
@@ -13,7 +14,9 @@ const TopMenu = () => {
     >
       <Row>
         <Col span={6}>Logo</Col>
-        <Col span={6}>Import Data</Col>
+        <Col span={6}>
+          <ImportData/>
+        </Col>
         <Col span={6}>Other Menu</Col>
         <Col span={6}>Login</Col>
       </Row>

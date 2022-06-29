@@ -26,7 +26,7 @@ const ChartField = ({ chartInputFieldName }) => {
       <div>{chartInputFieldName}</div>
       {
         charts[selectedChart].fields.filter(([, axis]) => axis === chartInputFieldName).map(([fieldId,]) => (
-          <div>{fields[fieldId].name}</div>
+          <div key={fieldId}>{fields[fieldId].name}</div>
         ))
       }
     </div>

@@ -3,13 +3,8 @@ import { createSlice } from "@reduxjs/toolkit/"
 const initialState = {
   selectedChart: null,
   charts: {},
-  datasets: ['A', 'B'],
-  fields: {
-    '1': { dataset: 'A', name: 'field1', values: [1, 2, 3, 4, 5, 6, 7] },
-    '2': { dataset: 'A', name: 'field2', values: [1, 2, 3, 4, 5, 6, 7] },
-    '3': { dataset: 'B', name: 'field3', values: [1, 2, 3, 4, 5, 6, 7] },
-    '4': { dataset: 'B', name: 'field4', values: [1, 2, 3, 4, 5, 6, 7] }
-  }
+  datasets: [],
+  fields: {}
 }
 
 export const chartConfigSlice = createSlice({
@@ -30,10 +25,17 @@ export const chartConfigSlice = createSlice({
     },
     attachFieldToChart: (state, action) => {
       state.charts[action.payload.chartId].fields.push([action.payload.fieldId, action.payload.axis])
+    },
+    addDataset: (state, action) => {
+      state.datasets.push(action.payload.dataset)
+      state.fields = {
+        ...state.fields,
+        ...action.payload.fields
+      }
     }
   }
 })
 
-export const { selectChart, unselectChart, addChart, setChartType, attachFieldToChart } = chartConfigSlice.actions
+export const { selectChart, unselectChart, addChart, setChartType, attachFieldToChart, addDataset } = chartConfigSlice.actions
 
 export default chartConfigSlice.reducer

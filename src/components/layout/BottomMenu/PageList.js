@@ -9,7 +9,7 @@ const PageList = () => {
   return (
     <div className="Pagination">
       {_.range(1, pageCounter + 1).map((p) => (
-        <Button>{`Page ${p}`}</Button>
+        <Button key={p}>{`Page ${p}`}</Button>
       ))}
       <Button onClick={() => dispatch(addPage())}>+</Button>
     </div>
